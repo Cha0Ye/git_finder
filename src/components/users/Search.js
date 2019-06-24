@@ -5,13 +5,20 @@ class Search extends Component {
         text :'',
     }
 
-    onChange = (e) => {
-        this.setState({text: e.target.value});
+    onChange = (e) => this.setState({ [e.target.name] : e.target.value});
+    
+    //with arrow function, will not have to bind 'this'
+    //prevent page from refreshing when form is submitted
+    onSubmit = (e) => {
+        e.preventDefault();
+        this.props.searchUsers(this.state.text);
+        this.setState({ text:'' });
     }
+
     render() {
         return (
             <div>
-                <form className="form"> 
+                <form onSubmit={this.onSubmit} className="form"> 
                 <input type="text" 
                        name="text" 
                        placeholder="Search Users..."
