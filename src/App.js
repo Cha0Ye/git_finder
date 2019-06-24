@@ -6,24 +6,37 @@ import axios from 'axios';
 import './App.css';
 
 class App extends Component {
+
   state = {
             users: [],
             loading: false,
-          }
-  async componentDidMount() {
-    this.setState({ loading:true });
-    const res = await axios.get(`https://api.github.com/users?cliend_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
-                                                                        $client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-    this.setState({ users: res.data, 
+          };
+
+  // async componentDidMount() {
+  //   this.setState({ loading:true });
+  //   const res = await axios.get(`https://api.github.com/users?cliend_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
+  //                                                                       $client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+  //   this.setState({ users: res.data, 
+  //                   loading: false,
+  //                 });
+  // }
+
+  //Search Github users
+  searchUsers = async (text) => {
+    this.setState({ loading: true });
+    const res = await axios.get(`https://api.github.com/search/users?q=${text}
+                                 &cliend_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
+                                 $client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+    this.setState({ users: res.data.items, 
                     loading: false,
                   });
   }
 
-  searchUsers = async (text) => {const res = await axios.get(`https://api.github.com/search/users?q=${text}&cliend_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
-                                                                                                           $client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-  this.setState({ users: res.data.items, 
-                  loading: false,
-                });
+  //Clear users from state
+  clearUsers = () => {
+    this.setState({ users: [],
+                    loading: false
+                  });
   }
   
   render() {  
@@ -31,9 +44,12 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar />
-        <Search searchUsers={this.searchUsers}/>
+        <Search searchUsers={this.searchUsers} 
+                clearUsers={this.clearUsers} 
+                showClear={this.state.users.length > 0 ? true: false } />
         <div className="container">
-          <Users loading={this.state.loading} users={this.state.users}/>
+          <Users loading={this.state.loading} 
+                 users={this.state.users} />
         </div>
       </div>
     );
