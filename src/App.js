@@ -40,7 +40,7 @@ class App extends Component {
 
   //Get a single Github user 
   getUser = async (username) => {
-    const res = await axios.get(`https://api.github.com/search/users?q=${username}
+    const res = await axios.get(`https://api.github.com/users?q=${username}
                                  &client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
                                  $client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
     this.setState({ user: res.data, loading: false });
