@@ -6,11 +6,13 @@ import { Link } from 'react-router-dom';
 class User extends Component {
     componentDidMount() {
         this.props.getUser(this.props.match.params.login);
+        this.props.getUserRepos(this.props.match.params.login);
     }
     static propTypes = {
         loading: PropType.bool,
         user: PropType.object.isRequired,
         getUser: PropType.func.isRequired,
+        getUserRepos: PropType.func.isRequired,
     }
     render() {
         const { name, company, avatar_url, location, bio, blog, login, html_url, followers,
